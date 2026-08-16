@@ -10,6 +10,11 @@ import SwiftUI
 @main
 struct WaterMonitorApp: App {
     @StateObject var vManager : viewModel = viewModel()
+
+    init() {
+        UIApplication.shared.delegate = PushNotificationDelegate()
+    }
+
     var body: some Scene {
         WindowGroup {
             if vManager.completedSetup == true || vManager.toggle == true{
