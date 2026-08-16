@@ -10,13 +10,16 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var vManager : viewModel
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            Tab("Home",systemImage: "house") {
+                MainmenuView()
+                    .environmentObject(vManager)
+            }
+            Tab("Settings",systemImage: "gear") {
+                Settings()
+                    .environmentObject(vManager)
+            }
         }
-        .padding()
     }
 }
 

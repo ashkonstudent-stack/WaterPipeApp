@@ -58,6 +58,9 @@ struct SetupTurial: View {
                 
             }
         }
+        .alert(vManager.errorMessage, isPresented: $vManager.showError) {
+            
+        }
         
     }
 }
