@@ -11,15 +11,16 @@ struct ContentView: View {
     @EnvironmentObject var vManager : viewModel
     var body: some View {
         TabView {
-            Tab("Home",systemImage: "house") {
+            Tab("Home",systemImage: "house.fill") {
                 MainmenuView()
                     .environmentObject(vManager)
             }
-            Tab("Settings",systemImage: "gear") {
+            Tab("Settings",systemImage: "gearshape.fill") {
                 Settings()
                     .environmentObject(vManager)
             }
         }
+        .tint(.blue)
     }
 }
 

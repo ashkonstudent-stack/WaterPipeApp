@@ -13,20 +13,43 @@ struct SetupTurial: View {
     @EnvironmentObject var vManager : viewModel
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.blue,.cyan.mix(with: .white, by: 0.1)], startPoint: .bottom, endPoint: .trailing)
-                .ignoresSafeArea()
-            VStack {
-                Text("Water Prototype Setup")
-                    .font(.largeTitle)
-                    .bold()
-                    .foregroundStyle(.white)
-                    .frame(maxWidth:.infinity)
+            WaterBackground()
+            VStack(spacing: 24) {
                 Spacer()
-                Form {
-                    TextField("Enter hub ip address",text:$ipAdress)
-                    TextField("Enter the port of the hub",text:$port)
+
+                VStack(spacing: 12) {
+                    Image(systemName: "drop.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundStyle(.white)
+                    Text("Water Prototype Setup")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+                    Text("Enter your hub's IP address and port to get started")
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.85))
+                        .multilineTextAlignment(.center)
                 }
-                .scrollContentBackground(.hidden)
+                .padding(.horizontal)
+
+                Spacer()
+
+                VStack(alignment: .leading, spacing: 20) {
+                    FieldLabel(text: "Hub IP Address", icon: "network")
+                    TextField("e.g. 192.168.1.42", text: $ipAdress)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.decimalPad)
+                        .appTextFieldStyle()
+
+                    FieldLabel(text: "Port", icon: "number")
+                    TextField("e.g. 8080", text: $port)
+                        .keyboardType(.numberPad)
+                        .appTextFieldStyle()
+                }
+                .glassPanel()
+                .padding(.horizontal)
+
                 Button {
                     if !ipAdress.isEmpty && !port.isEmpty {
                         if let a = Int(port) {
@@ -34,34 +57,31 @@ struct SetupTurial: View {
                             vManager.port = a
                             vManager.completedSetup = true
                             vManager.toggle = true
-                        
+
                         } else {
                             vManager.errorMessage = "Port must be a number"
                             vManager.showError.toggle()
                         }
-                            
+
                     } else {
                         vManager.errorMessage = "Please provide an input to both the ip address and port"
                         vManager.showError.toggle()
                     }
                 } label: {
                     Text("Done")
-                        .foregroundStyle(.white)
-                        .frame(maxWidth:.infinity)
-                        .padding()
-                        .background(.green)
-                        .cornerRadius(15)
-                    
-                        
                 }
+                .buttonStyle(PrimaryButtonStyle())
+                .disabled(ipAdress.isEmpty || port.isEmpty)
+                .opacity(ipAdress.isEmpty || port.isEmpty ? 0.6 : 1)
+                .padding(.horizontal)
 
-                
+                Spacer()
             }
         }
         .alert(vManager.errorMessage, isPresented: $vManager.showError) {
-            
+
         }
-        
+
     }
 }
 
