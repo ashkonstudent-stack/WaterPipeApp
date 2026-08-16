@@ -11,45 +11,43 @@ struct MainmenuView: View {
     @EnvironmentObject var vManager : viewModel
     var body: some View {
         NavigationStack {
-            ZStack {
-                WaterBackground()
-                ScrollView {
-                    VStack(spacing: 24) {
-                        VStack(spacing: 4) {
-                            Text("Control Center")
-                                .foregroundStyle(.white)
-                                .bold()
-                                .font(.largeTitle)
-                            Text("Monitor and manage your water hub")
-                                .font(.subheadline)
-                                .foregroundStyle(.white.opacity(0.85))
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 12)
-
-                        connectionStatusCard
-
-                        VStack(spacing: 16) {
-                            Button {
-                                //TODO: Code send a push notification request to the viewModel
-                            } label: {
-                                actionRow(icon: "bell.badge.fill", title: "Enable Notifications", subtitle: "Get alerted about water events")
-                            }
-                            .buttonStyle(ActionCardButtonStyle())
-
-                            Button {
-                                //TODO: Code a tcp connection request to the main hub
-                            } label: {
-                                actionRow(icon: "antenna.radiowaves.left.and.right", title: "Handshake Request", subtitle: "Connect to your hub")
-                            }
-                            .buttonStyle(ActionCardButtonStyle())
-                        }
-                        .padding(.horizontal)
-
-                        Spacer(minLength: 20)
+            ScrollView {
+                VStack(spacing: 24) {
+                    VStack(spacing: 4) {
+                        Text("Control Center")
+                            .foregroundStyle(.white)
+                            .bold()
+                            .font(.largeTitle)
+                        Text("Monitor and manage your water hub")
+                            .font(.subheadline)
+                            .foregroundStyle(.white.opacity(0.85))
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 12)
+
+                    connectionStatusCard
+
+                    VStack(spacing: 16) {
+                        Button {
+                            //TODO: Code send a push notification request to the viewModel
+                        } label: {
+                            actionRow(icon: "bell.badge.fill", title: "Enable Notifications", subtitle: "Get alerted about water events")
+                        }
+                        .buttonStyle(.plain)
+
+                        Button {
+                            //TODO: Code a tcp connection request to the main hub
+                        } label: {
+                            actionRow(icon: "antenna.radiowaves.left.and.right", title: "Handshake Request", subtitle: "Connect to your hub")
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(.horizontal)
+
+                    Spacer(minLength: 20)
                 }
             }
+            .appBackground()
             .toolbar(.hidden)
         }
     }
@@ -63,10 +61,10 @@ struct MainmenuView: View {
                 .background(.white.opacity(0.2), in: Circle())
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("Hub Connection")
+                Text("Hub Status Connection")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.75))
-                Text(vManager.ipAddress.isEmpty ? "Not configured" : "\(vManager.ipAddress):\(vManager.port)")
+                Text(vManager.connected == false ? "Not connected" : "\(vManager.ipAddress):\(vManager.port)")
                     .font(.headline)
                     .foregroundStyle(.white)
             }
@@ -74,7 +72,7 @@ struct MainmenuView: View {
             Spacer()
 
             Circle()
-                .fill(vManager.ipAddress.isEmpty ? Color.orange : Color.green)
+                .fill(vManager.connected == false ? Color.orange : Color.green)
                 .frame(width: 10, height: 10)
         }
         .glassPanel()
@@ -104,6 +102,8 @@ struct MainmenuView: View {
                 .font(.footnote.weight(.semibold))
                 .foregroundStyle(.black.opacity(0.3))
         }
+        .padding()
+        .background(.white.opacity(0.92), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 }
 

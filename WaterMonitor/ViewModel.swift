@@ -17,4 +17,5 @@ final class viewModel : ObservableObject {
     @Published var toggle: Bool = false
     @Published var showError : Bool = false
     @Published var errorMessage : String = ""
+    @Published var connected : Bool = false
 }
