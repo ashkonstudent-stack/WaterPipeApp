@@ -15,6 +15,11 @@ enum PushNotificationError: Error {
     case notAuthorized
 }
 
+struct jsonStatus : Codable {
+    let status : String
+    let token : String
+}
+
 final class viewModel : ObservableObject {
     @AppStorage("IPAddress") var ipAddress : String = ""
     @AppStorage("Port") var port : Int = 0
@@ -38,4 +43,23 @@ final class viewModel : ObservableObject {
             }
         }
     }
+    func attemptHandshake(token:String) async throws -> String {
+        guard let URL = URL(string:"http://\(self.ipAddress):\(self.port)/register/\(token)") else {
+            return "Failed to recognize URL"
+        }
+        do {
+            let (data,response) = try await URLSession.shared.data(from: URL)
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                print("Server error response")
+                return "Server error response"
+            }
+            let decoded = try JSONDecoder().decode(jsonStatus.self, from: data)
+            return decoded.status
+        } catch {
+            print("Network or decoding error \(error.localizedDescription)")
+        }
+        
+        return "Error"
+    }
+    
 }

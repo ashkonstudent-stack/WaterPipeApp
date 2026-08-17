@@ -37,6 +37,15 @@ struct MainmenuView: View {
 
                         Button {
                             //TODO: Code a tcp connection request to the main hub
+                            Task {
+                                let result = try await vManager.attemptHandshake(token: "abc123")
+                                if result != "ok" {
+                                    print("Error while sending handshake: \(result)")
+                                } else {
+                                    print("Handshake completed successfully!")
+                                }
+                            }
+
                         } label: {
                             actionRow(icon: "antenna.radiowaves.left.and.right", title: "Handshake Request", subtitle: "Connect to your hub")
                         }
