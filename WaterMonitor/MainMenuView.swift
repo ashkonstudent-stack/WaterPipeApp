@@ -73,7 +73,7 @@ struct MainmenuView: View {
                 Text("Hub Status Connection")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.75))
-                Text(vManager.connected == false ? "Not connected" : "\(vManager.ipAddress):\(vManager.port)")
+                Text(vManager.completedHandshake == false ? "Not connected" : "\(vManager.ipAddress):\(vManager.port)")
                     .font(.headline)
                     .foregroundStyle(.white)
             }
@@ -81,7 +81,7 @@ struct MainmenuView: View {
             Spacer()
 
             Circle()
-                .fill(vManager.connected == false ? Color.orange : Color.green)
+                .fill(vManager.completedHandshake == false ? Color.orange : Color.green)
                 .frame(width: 10, height: 10)
         }
         .glassPanel()

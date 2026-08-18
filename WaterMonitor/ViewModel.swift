@@ -28,7 +28,6 @@ final class viewModel : ObservableObject {
     @Published var toggle: Bool = false
     @Published var showError : Bool = false
     @Published var errorMessage : String = ""
-    @Published var connected : Bool = false
 
     func requestPushNotificationToken() async throws -> String {
         let granted = try await UNUserNotificationCenter.current()
@@ -54,6 +53,9 @@ final class viewModel : ObservableObject {
                 return "Server error response"
             }
             let decoded = try JSONDecoder().decode(jsonStatus.self, from: data)
+            if decoded.status == "ok" {
+                self.completedHandshake = true
+            }
             return decoded.status
         } catch {
             print("Network or decoding error \(error.localizedDescription)")
